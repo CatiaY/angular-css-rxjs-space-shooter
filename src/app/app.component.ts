@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { fromEvent, interval, Subscription } from 'rxjs';
+import { fromEvent, interval, Subscription, timer } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { Posicao } from './models/posicao';
 import { Inimigo } from './models/inimigo';
@@ -27,12 +27,19 @@ export class AppComponent {
   teclaPressionada: Subscription;  
   controladorGameFrames: Subscription;
       
+  animacaoPlayer: string = 'animacao-vivo'; 
   
-  //-------------------------------------------------------------------
-  iniciarJogo(): void {
+  animacaoExplosao: string = 'paused';
+  explosaoLeft: number;
+  explosaoBottom: number;
     
+
+  //-------------------------------------------------------------------
+  iniciarJogo(): void {    
     this.fimDeJogo = false; 
-    this.pontuacao = 0;  
+    this.pontuacao = 0; 
+    
+    this.animacaoPlayer = 'animacao-vivo';
 
     if(this.inimigos.length === 0)
       this.criarInimigos();  
@@ -49,8 +56,8 @@ export class AppComponent {
       .subscribe(i => {
         let indice = i % this.inimigos.length;
         this.inimigos[indice] = {...INIMIGOS[this.obtemNumeroAleatorio(0, GAME_CONFIG.qtdInimigos - 1)]};
-        this.inimigos[indice].bottom = this.obtemNumeroAleatorio(BORDAS_JOGO.bottom, BORDAS_JOGO.top);
-        this.inimigos[indice].emTela = true;        
+        this.inimigos[indice].bottom = this.obtemNumeroAleatorio(BORDAS_JOGO.bottom, BORDAS_JOGO.top);        
+        this.inimigos[indice].emTela = true;
       });
     
     this.controladorGameFrames = interval(GAME_CONFIG.frameRateAnimacao)
@@ -74,6 +81,8 @@ export class AppComponent {
     for(let i = 0; i < GAME_CONFIG.qtdInimigos; i++) {
       this.resetarInimigo(this.inimigos[i]);
     }    
+
+    this.animacaoPlayer = 'animacao-morto';  
   }
 
 
@@ -115,7 +124,7 @@ export class AppComponent {
       return;     
     
     this.estaAtirando = true;  
-    this.tiro.bottom = this.jogador.bottom;
+    this.tiro.bottom = this.jogador.bottom + GAME_CONFIG.tiroPosicaoAjuste;
     this.tiro.left = this.jogador.left;
   }
 
@@ -151,13 +160,18 @@ export class AppComponent {
       return;
     
     if (this.estaAtirando && this.checarColisao(inimigo, this.tiro)){ 
-      this.pontuacao += GAME_CONFIG.pontos;         
-      this.removerTiro();    
-      this.resetarInimigo(inimigo);
+      this.pontuacao += GAME_CONFIG.pontos;               
+      this.removerTiro();
+      this.explodirInimigo(inimigo);      
+      this.resetarInimigo(inimigo);      
     }
-    // Se o inimigo chegar no lado esquerdo ou colidir com o jogador, é game over
-    else if (inimigo.left < -30 || this.checarColisao(inimigo, this.jogador)) {            
+    // Se o inimigo chegar no lado esquerdo é game over
+    else if (inimigo.left < -30) {
       this.gameOver();      
+    } 
+    else if (this.checarColisao(inimigo, this.jogador)) {
+      this.explodirInimigo(inimigo);
+      this.gameOver();
     } 
     else {        
       inimigo.left -= inimigo.velocidade;        
@@ -168,6 +182,16 @@ export class AppComponent {
     inimigo.left = GAME_CONFIG.inimigoPosicaoLeftInicial;
     inimigo.emTela = false;
   }
+
+  explodirInimigo(inimigo: Inimigo): void {
+    this.explosaoBottom = inimigo.bottom;
+    this.explosaoLeft = inimigo.left;    
+    this.animacaoExplosao = 'running';
+    timer(500).subscribe(() => {    
+      this.animacaoExplosao = 'paused';
+    });
+  }
+
 
   //-------------------------------------------------------------------  
   checarColisao(obj1: Posicao, obj2: Posicao): boolean {
@@ -210,13 +234,14 @@ export class AppComponent {
     return estilos;
   }
 
-  configurarEstilosInimigo(inimigo: Inimigo): any {    
+  configurarEstilosInimigo(inimigo: Inimigo): any {        
     let estilos = {
       'bottom': `${inimigo.bottom}px`,      
       'left': `${inimigo.left}px`,
       'width': `${inimigo.width}px`,
       'height': `${inimigo.height}px`,
-      'velocidade': `${inimigo.velocidade}px`
+      'background-image': inimigo.imgUrl,
+      'animation': inimigo.animation
     };
     return estilos;
   }

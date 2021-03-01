@@ -4,8 +4,16 @@
     margin: 30px auto 20px auto; 
     position: relative;
     overflow: hidden;
-  
-    background-color: black;   
+      
+    background-image: url("/assets/img/background.png");
+    background-size:contain;
+    background-repeat: repeat-x;  
+    
+    animation: animacao-background 25s infinite linear;  
+    -webkit-animation: animacao-background 25s infinite linear;
+    -moz-animation: animacao-background 25s infinite linear;
+    -ms-animation: animacao-background 25s infinite linear;
+    -o-animation: animacao-background 25s infinite linear;
 }
 
 .pontuacao {
@@ -59,18 +67,79 @@ button:active {
 } 
 
 .jogador {
-    position: absolute;        
-        
-    background-color: #f24437;    
+    position: absolute;
+    background-image: url("/assets/img/jogador.png");
+    background-size: cover;
 }
 
 .tiro {
     position: absolute;        
-    background-color: yellow;    
+    background-image: url("/assets/img/tiro.png");
+    background-size: cover;
 }
 
 .inimigo {
     position: absolute;
-   
-    background-color: blue;   
+    background-size: cover;    
+}
+
+.explosao {
+    position: absolute;    
+    background-size: cover;    
+    width: 90px; 
+    height: 90px;    
+    background-image: url("/assets/img/explosao.png");    
+
+    animation: animacao-explosao .5s steps(5) infinite; 
+    -webkit-animation: animacao-explosao .5s steps(5) infinite;
+    -moz-animation: animacao-explosao .5s steps(5) infinite;
+    -ms-animation: animacao-explosao .5s steps(5) infinite;
+    -o-animation: animacao-explosao .5s steps(5) infinite;
+}
+
+
+/* Animações */
+.animacao-vivo {
+    background-image: url("/assets/img/jogador.png");
+    
+    animation: animacao-vivo 1s steps(8) infinite;
+    -webkit-animation: animacao-vivo 1s steps(8) infinite;
+    -moz-animation: animacao-vivo 1s steps(8) infinite;
+    -ms-animation: animacao-vivo 1s steps(8) infinite;
+    -o-animation: animacao-vivo 1s steps(8) infinite;
+  }
+  
+.animacao-morto {
+    background-image: url("/assets/img/jogador-morto.png");  
+}  
+ 
+
+@keyframes animacao-vivo {
+    from { background-position-x: 0%; }
+    to { background-position-x: 800%; }  
+} 
+
+@keyframes animacao-background {  
+    from { background-position: 400%; }
+    to { background-position: 0%; }
+}
+
+@keyframes animacao-inimigo-1 {
+    from { background-position-x: 0%; }
+    to { background-position-x: 300%; }  
+}
+
+@keyframes animacao-inimigo-2 {
+    from { background-position-x: 0%; }
+    to { background-position-x: 400%; }  
+}
+
+@keyframes animacao-inimigo-3 {
+    from { background-position-x: 0%; }
+    to { background-position-x: 600%; }  
+}
+
+@keyframes animacao-explosao {
+    from { background-position-x: 0%; opacity: 1; }
+    to { background-position-x: 500%; opacity: 0; }  
 }

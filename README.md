@@ -1,4 +1,30 @@
-# SpaceShooter
+# Kirby Space Shooter
+
+Projeto utilizando Typescript e Angular 11.
+
+* Animações configuradas no CSS e aplicadas por meio de classes.
+* Movimento dos personagens utilizando a biblioteca rxjs.
+
+<p>&nbsp;</p>
+
+O desenvolvimento do projeto base foi feito a partir da atividade "Criando seu jogo no estilo Space Shooter", de [Gabriela Pinheiro](https://github.com/SpruceGabriela/space-shooter-dio), da Digital Innovation One.
+
+<p>&nbsp;</p>
+
+## Demonstração: [Link](http://jogo-kirby-space-shooter.s3-website-sa-east-1.amazonaws.com)
+
+<p>&nbsp;</p>
+
+![Preview](ReadMe/demonstracao.gif)
+
+<p>&nbsp;</p>
+
+## Créditos das imagens:
+Background e sprites: Kirby Mass Atack | Hal Laboratory©
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.2.
 

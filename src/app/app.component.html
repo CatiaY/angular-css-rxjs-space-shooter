@@ -1,5 +1,7 @@
 <div class="game">  
 
+  <div class="inimigoTeste"></div>
+
   <div class="iniciarJogo" *ngIf="fimDeJogo">
     <div class="mensagem" *ngIf="fimDeJogo">
       {{ exibirMsgPerdeu? 'Você perdeu =(' : 'Instruções: Não deixe os inimigos passarem! Use as setas do teclado para se mover e atire com a tecla "espaço"' }}
@@ -9,10 +11,17 @@
    
   <div class="pontuacao">Pontuação: {{ pontuacao }}</div>
   
-  <div class="jogador" [ngStyle]="configurarEstilosPlayer()"></div>    
+  <div class="jogador {{animacaoPlayer}}" [ngStyle]="configurarEstilosPlayer()"></div>      
   
-  <div class="tiro" *ngIf="estaAtirando" [ngStyle]="configurarEstilosTiro()"></div>
+  <div class="tiro" *ngIf="estaAtirando" [ngStyle]="configurarEstilosTiro()"></div>  
   
-  <div class="inimigo" *ngFor="let inimigo of inimigos" [ngStyle]="configurarEstilosInimigo(inimigo)" ></div>
+  <div *ngFor="let inimigo of inimigos" class="inimigo" [ngStyle]="configurarEstilosInimigo(inimigo)"></div>  
+  
+  <div class="explosao" 
+    *ngIf="(animacaoExplosao === 'running')"
+    [style.animation-play-state]="animacaoExplosao" 
+    style.left="{{ explosaoLeft }}px" 
+    style.bottom="{{ explosaoBottom }}px">
+  </div>
   
 </div>
